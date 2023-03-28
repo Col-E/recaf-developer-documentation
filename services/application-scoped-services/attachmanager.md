@@ -47,12 +47,13 @@ String mainClass = attachManager.getVirtualMachineMainClass(descriptor);
 
 ### Example: Access JMX bean information of a remote JVM
 
-<pre class="language-java"><code class="lang-java">// Recaf has a wrapper type for the JMX connection which grants one-liner access to common beans.
+```java
+// Recaf has a wrapper type for the JMX connection which grants one-liner access to common beans.
 JmxBeanServerConnection jmxConnection = attachManager.getJmxServerConnection(descriptor);
-<strong>
-</strong><strong>// Available beans
-</strong><strong>MBeanInfo beanClassLoading = jmxConnection.getClassloadingBeanInfo();
-</strong>MBeanInfo beanCompilation = jmxConnection.getCompilationBeanInfo();
+
+// Available beans
+MBeanInfo beanClassLoading = jmxConnection.getClassloadingBeanInfo();
+MBeanInfo beanCompilation = jmxConnection.getCompilationBeanInfo();
 MBeanInfo beanOperatingSystem = jmxConnection.getOperatingSystemBeanInfo();
 MBeanInfo beanRuntime = jmxConnection.getRuntimeBeanInfo();
 MBeanInfo beanThread = jmxConnection.getThreadBeanInfo();
@@ -71,7 +72,7 @@ try {
 } catch (Exception ex) {
     logger.error("Failed to retrieve attribute values", ex);
 }
-</code></pre>
+```
 
 ## Connecting to remote JVMs
 
