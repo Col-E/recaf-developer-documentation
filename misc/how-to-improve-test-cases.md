@@ -18,18 +18,18 @@ How can you quickly tell what circumstances are covered by test cases though? Th
 
 You can check what branches in the source are covered by running the tests via `gradlew test` and then build the coverage report via `gradlew buildJacocoAggregate`. All tests are configured to log coverage data via JaCoCo, and the `buildJacocoAggregate` task generates a report consolidating coverage from all tests in all modules into a single report. You can access the report in `./build/aggregate/`.
 
-<figure><img src="../.gitbook/assets/image (1).png" alt=""><figcaption><p>The main index page of the report shows a table of package's coverage</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/Coverage-Index.png" alt=""><figcaption><p>The main index page of the report shows a table of package's coverage</p></figcaption></figure>
 
 The main index page in the HTML report is a table showing which packages have the best code coverage. You can click on the packages to get data on each class in the package.
 
-<figure><img src="../.gitbook/assets/image.png" alt=""><figcaption><p>The table of a package's coverage shows per-class stats</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/Coverage-Package.png" alt=""><figcaption><p>The table of a package's coverage shows per-class stats</p></figcaption></figure>
 
 Clicking on a class shows per-method coverage.
 
-<figure><img src="../.gitbook/assets/image (2).png" alt=""><figcaption><p>The table of a class's coverage shows per-method stats</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/Coverage-Class.png" alt=""><figcaption><p>The table of a class's coverage shows per-method stats</p></figcaption></figure>
 
 Clicking on a method finally shows you the actual class source code, with information on coverage showed as line indicators. Clicking/hovering on them will reveal information like _"1 out of 2 branches covered"_.
 
-<figure><img src="../.gitbook/assets/image (3).png" alt=""><figcaption><p>Green means all branches are covered. Yellow means some were covered. Red means the code was missed.</p></figcaption></figure>
+<figure><img src="../.gitbook/assets/Coverage-Class-Source.png" alt=""><figcaption><p>Green means all branches are covered. Yellow means some were covered. Red means the code was missed.</p></figcaption></figure>
 
 Naturally the more code that is covered the better. So using these reports to figure out where coverage is missing from really helps.
