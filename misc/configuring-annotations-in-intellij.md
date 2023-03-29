@@ -4,6 +4,12 @@ description: To gain compile-time nullability checks in IntelliJ follow this qui
 
 # Configuring annotations in IntelliJ
 
+To cut down on the number of problems with `NullPointerException` nullability annotations are heavily used in Recaf's source. With an IDE's support this can catch problems early on.
+
+<figure><img src="../.gitbook/assets/image (5).png" alt=""><figcaption><p>Explicit nulls passed to method with parameters marked as <code>Nonnull</code> display warnings.</p></figcaption></figure>
+
+<figure><img src="../.gitbook/assets/image (4).png" alt=""><figcaption><p>The Nullable annotation isn't needed here, but is useful for documentation purposes. Even without it IntelliJ will warn that the call to the call to <code>splitNewlineSkipEmpty</code> may be taking in a <em>possible</em> <code>null</code> value.</p></figcaption></figure>
+
 You'll want to make it so that `@Nonnull` and `@Nullable` are recognized by IntelliJ. The settings you'll want to change are highlighted here.
 
 <figure><img src="../.gitbook/assets/IntelliJ-settings-1.png" alt=""><figcaption></figcaption></figure>

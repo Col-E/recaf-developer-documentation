@@ -13,7 +13,7 @@ These are the services outlined in the `api` module.&#x20;
 * AggregateMappingManager
 * AstService
 * CallGraph
-* InheritanceGraph
+* [InheritanceGraph](inheritancegraph.md)
 * MappingApplier
 
 ## Core

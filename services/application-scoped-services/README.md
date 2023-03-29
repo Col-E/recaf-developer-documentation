@@ -18,7 +18,7 @@ These are the services outlined in the `api` module. Some are given basic implem
 * MappingFormatManager
 * MappingGenerator
 * PluginManager
-* ResourceImporter
+* [ResourceImporter](resourceimporter.md)
 * ScriptEngine
 * SearchService
 * WorkspaceManager

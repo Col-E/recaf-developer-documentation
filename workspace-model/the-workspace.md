@@ -4,7 +4,7 @@ description: A workspace is the outline of one or more input files.
 
 # The workspace
 
-<figure><img src="../.gitbook/assets/Workspace-model.png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/Workspace-model.png" alt=""><figcaption><p>A visual layout of the workspace model</p></figcaption></figure>
 
 **Legend**
 
@@ -19,13 +19,38 @@ description: A workspace is the outline of one or more input files.
 9. The runtime resource allows Recaf to access classes in the current JVM process like `java.lang.String`.
 10. The phantom resource analyzes content in the primary and supporting resources when the workspace is first created and then generates missing references. This allows services like recompilation to compile against libraries that are not directly provided as a supporting resource. This generally works well clean inputs but often fails when obfuscated code is present, which isn't that bad since you shouldn't be recompiling against obfuscated code anyway.
 
+## Creating workspaces
+
+To create a `Workspace` instance you will almost always be using the `BasicWorkspace` implementation. You can pass along either:
+
+* A single `WorkspaceResource` for the primary resource.
+* A single `WorkspaceResource` for the primary resource, plus `Collection<WorkspaceResource>` for the supporting resources.
+
+To create a `WorkspaceResource` you can use the [`ResourceImporter` service](../services/application-scoped-services/resourceimporter.md), which allows you to read content from a variety of inputs.
+
 ## Loading workspaces
 
-You will typically be using the `BasicWorkspace` implementation of `Workspace` for most operations. Creating one of these requires a primary resource, and optionally a collection of supporting resources. You can load resources via `ResourceImporter`.
+There are multiple ways to load workspaces internally. Depending on your intent you'll want to do it differently.
+
+For loading from `Path` values in a UI context, use `PathLoadingManager`. It will handle loading the content from the path in a background thread, and gives you a simple consumer type to handle IO problems.
+
+Otherwise, you can use `WorkspaceManager` directly to call `setCurrent(Workspace)`.
 
 ## Exporting workspaces
 
-You will create an instance of `WorkspaceExportOptions` and configure it however you like. Then you can call `WorkspaceExportOptions.create()` to create a `WorkspaceExporter` instance. The `WorkspaceExporter` is re-usable and exports workspaces via `WorkspaceExporter.export(Workspace)`. There are also helper methods in `WorkspaceManager` if you prefer to use those.
+You can create an instance of `WorkspaceExportOptions` and configure them to suite your needs. The options allow you to change:
+
+* The compression scheme of contents.&#x20;
+  * `MATCH_ORIGINAL` which will only compress items if they were originally compressed when read.
+  * `SMART` which will only compress items if compression yields a smaller output than a non-compressed item. Very small files may become larger with compression due to the overhead of the compression scheme's dictionary.
+  * `ALWAYS` which always compresses items.
+  * `NEVERY` which never compresses items.
+* The output type, being a file or directory.
+* The path to write to.
+* The option to bundle contents of supporting resources into the exported output.
+* The option to create ZIP file directory entries, if the output type is `FILE`. This creates empty entries in the output of ZIP/JAR files detailing directory paths. Some tools may use this data, but its not required for most circumstances.
+
+The configured options instance can be re-used to export contents with the same configuration multiple times. To export a workspace do `options.create()` to create a `WorkspaceExporter` which then allows you to pass a `Workspace` instance.
 
 ## Listeners
 
@@ -37,7 +62,66 @@ The `WorkspaceManager` allows you to register listeners for multiple workspace e
 
 When creating services and CDI enabled classes, you can annotate the class with `@AutoRegisterWorkspaceListeners` to automatically register and unregister the class based on what is necessary for the CDI scope.
 
-## Finding classes/files in the workspace
+## Accessing classes/files in the workspace
+
+Classes and files reside within the `WorkspaceResource` items in a `Workspace`. You can access the resources directly like so:
+
+```java
+// Content the user intends to edit
+WorkspaceResource resource = workspace.getPrimaryResource();
+
+// Content to support editing, but is not editable
+List<WorkspaceResource> resources = workspace.getSupportingResources();
+
+// All content in the workspace, which may include internally managed 
+// supporting resources if desired. Typically 'false'.
+List<WorkspaceResource> resources = workspace.getAllResources(includeInternal);
+```
+
+As described in the workspace model above, resources have multiple _"bundles"_ that contain content. The groups exist to facilitate modeling a variety of potential input types that Recaf supports. Bundles that represent classes share a common type `ClassBundle` and then are broken down further into `JvmClassBundle` and `AndroidClassBundle` where relevant. Bundles that represent files are only ever `FileBundle`.
+
+```java
+// Contains JVM classes
+JvmClassBundle bundle = resource.getJvmClassBundle();
+
+// Contains JVM classes, grouped by the version of Java targeted by each class
+NavigableMap<Integer, JvmClassBundle> bundles = resource.getVersionedJvmClassBundles();
+
+// Contains Android classes, grouped by the name of each DEX file
+Map<String, AndroidClassBundle> bundles = resource.getAndroidClassBundles();
+
+// Contains files
+FileBundle bundle = resource.getFileBundle();
+
+// Contains files that represent archives, with a model of the archive contents
+Map<String, WorkspaceFileResource> embeddedResources = resource.getEmbeddedResources();
+```
+
+These bundles are `Map<String, T>` and `Iterable<T>` where `T` is the content type.
+
+```java
+JvmClassBundle classBundle = resource.getJvmClassBundle();
+FileBundle fileBundle = resource.getFileBundle();
+
+// Get JVM class by name (remember to null check)
+JvmClassInfo exampleClass = classBundle.get("com/example/Example");
+
+// Looping over bundles
+for (JvmClassInfo classInfo : classBundle)
+    ...
+for (FileInfo fileInfo : fileBundle)
+    ...
+
+// There are also stream operations to easily iterate over multiple bundles at once.
+resource.classBundleStream()
+         .flatMap(Bundle::stream)
+         .forEach(classInfo -> {
+             // All classes in all bundles that hold 'ClassInfo' values
+             // including JvmClassBundle and AndroidClassBundle instances
+         });
+```
+
+## Finding specific classes/files in the workspace
 
 The `Workspace` interface defines some `find` operations allowing for simple name look-ups of classes and files.
 

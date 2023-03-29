@@ -35,7 +35,7 @@ InheritanceVertex red = graph.getVertex("Red");
 //   The set 'appleParents' will have 2 elements: Edible, Red
 //   The set 'wormAppleParents' will have 1 element: Apple
 //   The set 'wormAppleAllParents' will have 3 element: Apple, Edible, Red
-//   The set 'redParents ' will be empty
+//   The set 'redParents' will be empty
 Set<InheritanceVertex> appleParents = apple.getParents();
 Set<InheritanceVertex> wormAppleParents = wormApple.getParents();
 Set<InheritanceVertex> wormAppleAllParents = wormApple.getAllParents();
