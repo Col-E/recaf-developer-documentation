@@ -6,7 +6,7 @@ description: >-
 
 # AttachManager
 
-The `AttachManager` allows you to:&#x20;
+The attach manager allows you to:&#x20;
 
 * Inspect what JVM processes are running on the current machine
   * Get value of `System.getProperties(`) of the remote JVM

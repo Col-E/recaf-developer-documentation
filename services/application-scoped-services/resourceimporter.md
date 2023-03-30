@@ -6,7 +6,7 @@ description: >-
 
 # ResourceImporter
 
-The `ResourceImporter` can import a `WorkspaceResource` from a variety of inputs such as:
+The resource importer can import a `WorkspaceResource` from a variety of inputs such as:
 
 * `ByteSource` - Delegates to some data-source providing content as a `byte[]`
 * `File` - Can point to a file, or directory

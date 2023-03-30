@@ -11,8 +11,8 @@ These services are available for injection at any point.
 These are the services outlined in the `api` module. Some are given basic implementations within the `api` module, while others may be given more _"heavy"_ implementations in the `core` module.
 
 * [AttachManager](attachmanager.md)
-* ConfigManager
-* DecompileManager
+* [ConfigManager](configmanager.md)
+* [DecompileManager](decompilemanager.md)
 * InfoImporter
 * JavacCompiler
 * MappingFormatManager

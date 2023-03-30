@@ -21,6 +21,8 @@
 
 * [Application scoped services](services/application-scoped-services/README.md)
   * [AttachManager](services/application-scoped-services/attachmanager.md)
+  * [ConfigManager](services/application-scoped-services/configmanager.md)
+  * [DecompileManager](services/application-scoped-services/decompilemanager.md)
   * [ResourceImporter](services/application-scoped-services/resourceimporter.md)
 * [Workspace scoped services](services/workspace-scoped-services/README.md)
   * [InheritanceGraph](services/workspace-scoped-services/inheritancegraph.md)

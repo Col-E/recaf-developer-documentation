@@ -6,6 +6,14 @@ description: >-
 
 # CDI
 
+## Context before jumping into CDI
+
+If you are unfamiliar with dependency injection (DI) and DI frameworks, watch this video. It covers example cases where using DI makes sense, and how DI frameworks are used. While the series the video belongs to is for Dagger, the ideas apply globally to all DI frameworks.
+
+{% embed url="https://www.youtube.com/watch?v=ZZ_qek0hGkM" %}
+Video with examples covering 'what is DI?' and 'when to use DI?'
+{% endembed %}
+
 ## What is CDI though?
 
 CDI is [Contexts and Dependency Injection for Java EE](https://www.cdi-spec.org/). If that sounds confusing here's what that actually means in practice. When a `class` implements one of Recaf's service interfaces we need a way to access that implementation so that the feature can be used. CDI uses annotations to determine when to allocate new instances of these implementations. The main three used in Recaf are the following:
@@ -35,7 +43,7 @@ class CompilerImpl implements Compiler {
 Then in our UI we can create a class that injects the base `Compiler` type. We do not need to know any implementation details. Because we have only one implementation the CDI container knows the grab an instance of `CompilerImpl` and pass it along to our constructor annotated with `@Inject`.
 
 ```java
-@WorkspaceScoped
+@Dependent
 class CompilerGui {
     TextArea textEditor = ...
     
