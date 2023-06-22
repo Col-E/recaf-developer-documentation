@@ -40,24 +40,27 @@ You can access any of Recaf's services by declaring a constructor annotated with
 
 ### Shorthand script
 
-A shorthand script lets you write your logic without needing to declare a class and `run()` method. You can access the current workspace through the `workspace` variable provided to you.
+A shorthand script lets you write your logic without needing to declare a class and `run()` method. These shorthand scripts are given a variable reference to the current workspace, and a SLF4J logger. You can access the current workspace as `workspace` and the logger as `log`.
 
 <pre class="language-java"><code class="lang-java"><strong>// ==Metadata==
-</strong>// @name Hello world
-// @description Prints hello world
+</strong>// @name What is open?
+// @description Prints what kinda workspace is open
 // @version 1.0.0
 // @author Author
 // ==/Metadata==
 
-System.out.println("Hello world");
+String name = "(empty)";
+if (workspace != null)
+    name = workspace.getClass().getSimpleName();
+log.info("Workspace = {}", name);
 </code></pre>
 
-An example with using the provided `workspace`:
+Another example working with the provided `workspace`:
 
 ```java
 // Print out all enum names in the current workspace, if one is open.
 if (workspace == null) return;
 workspace.findClasses(Accessed::hasEnumModifier).stream()
     .map(c -> c.getValue().getName())
-    .forEach(name -> System.out.println("Enum: " + name));
+    .forEach(name -> log.info("Enum: {}", name));
 ```

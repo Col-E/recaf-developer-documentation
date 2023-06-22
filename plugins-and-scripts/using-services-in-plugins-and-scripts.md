@@ -106,7 +106,7 @@ import java.nio.file.Paths;
 
 @Dependent
 public class LoadContentScript {
-    private static final Logger logger = Logging.get("launch-script");
+    private static final Logger logger = Logging.get("load-script");
     private final ResourceImporter importer;
     private final WorkspaceManager workspaceManager;
 

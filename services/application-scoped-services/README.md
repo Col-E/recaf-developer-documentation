@@ -17,6 +17,7 @@ These are the services outlined in the `api` module. Some are given basic implem
 * JavacCompiler
 * MappingFormatManager
 * MappingGenerator
+* PhantomGenerator
 * PluginManager
 * [ResourceImporter](resourceimporter.md)
 * ScriptEngine
@@ -31,8 +32,11 @@ The `core` module defines no new service types, but provides implementations for
 
 The `ui` module defines a number of new service types dedicated to UI behavior.
 
-* ContextMenuProviderService
-* IconProviderService
+* Actions
+* CellConfigurationService _(Wraps these services)_
+  * ContextMenuProviderService
+  * IconProviderService
+  * TextProviderService
 * ConfigComponentManager
 * ConfigIconManager
 * ResourceSummaryService

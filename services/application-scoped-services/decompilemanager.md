@@ -15,12 +15,31 @@ The decompile manager allows you to:
 
 Using the decompile calls in this manager will schedule the tasks in a shared thread-pool. Calling the decompile methods on the `Decompiler` instances directly is a blocking operation. If you want to decompile many items it would be best to take advantage of the manager due to the pool usage.
 
-## Decompiling a class
+## Choosing a decompiler
+
+There are a number of ways to grab a `Decompiler` instance. The operations are the same for JVM and Android implementations.
 
 ```java
-// If you want to pass a specific decompiler, get an instance and pass it to
-// the decompile functions. You can remove the 'decompiler' parameter and then
-// the manager will use the 'preffered' decompiler for the class type (JVM or Android)
+// Currently configured target decompiler
+JvmDecompiler decompiler = decompilerManager.getTargetJvmDecompiler();
+
+// Specific decompiler by name
+JvmDecompiler decompiler = decompilerManager.getJvmDecompiler("cfr");
+
+// Any decompiler matching some condition, falling back to the target decompiler
+JvmDecompiler decompiler = decompilerManager.getJvmDecompilers().stream()
+                .filter(d -> d.getName().equals("procyon"))
+                .findFirst().orElse(decompilerManager.getTargetJvmDecompiler());
+```
+
+## Decompiling a class
+
+If you want to pass a specific decompiler, get an instance and pass it to the decompile functions provided by `DecompileManager`:
+
+* `decompile(Workspace, JvmClassInfo)` - Uses the target decompiler
+* `decompile(JvmDecompiler, Workspace, JvmClassInfo)` - Uses the specified decompiler
+
+```java
 JvmDecompiler decompiler = ...;
 
 // Handle result when it's done.
