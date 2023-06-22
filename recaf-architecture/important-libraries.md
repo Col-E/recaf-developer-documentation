@@ -8,9 +8,11 @@ description: A brief overview of the major dependencies Recaf uses in each modul
 
 **JVM Bytecode Manipulation**: Recaf uses [ASM](https://asm.ow2.io/) and [CafeDude](https://github.com/Col-E/CAFED00D) to parse bytecode. Most operations will be based on ASM since heavily abstracts away the class file format, making what would otherwise be tedious work simple. CafeDude is used for lower level operations and patching classes that are not compliant with ASM.
 
-**Android Dalvik Bytecode Manipulation**: Recaf uses [DexLib & Smali](https://github.com/JesusFreke/smali/) to parse and manipulate Android bytecode.
+**Android to Java Conversion**: Recaf uses [dex-translator](https://github.com/Col-E/dex-translator/) to map the Dalvik bytecode of classes into JVM bytecode. This process is a bit lossy, but allows the use of JVM tooling _(like the different decompilers)_ on Android content.
 
-**ZIP Files**: Recaf uses [LL-Java-Zip](https://github.com/Col-E/LL-Java-Zip) to read ZIP files. We do not use the standard `java.util.zip` classes because it does allow you to choose how you read ZIP files. Most ZIP parsing software scans for ZIP headers starting at the beginning of the file going forward. However when reading from JAR files the JVM scans at the end going backwards. This can lead to a difference in what you see in common ZIP tools vs what actually gets loaded by the JVM at runtime. In order to allow users to choose which behavior they want when reading from a ZIP we need to use our own library for that.
+**Android Dalvik Bytecode Manipulation**: We are currently investigating on how to handle Dalvik manipulation.
+
+**ZIP Files**: Recaf uses [LL-Java-Zip](https://github.com/Col-E/LL-Java-Zip) to read ZIP files. The behavior of LL-Java-Zip is configurable and can mirror interpreting archives in different ways. This is important for Java reverse engineering since the JVM itself has some odd parsing quirks that most other libraries do not mirror. More information about this can be read on the LL-Java-Zip project page.
 
 **Source Parsing**: Recaf uses [OpenRewrite](https://github.com/openrewrite/rewrite) to parse Java source code. The major reasons for choosing this over other more mainstream parsing libraries are that:
 
