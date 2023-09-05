@@ -17,7 +17,7 @@ description: A workspace is the outline of one or more input files.
 7. Workspaces can have multiple inputs. These additional inputs can be used to enhance performance of some services such as inheritance graphing, recompilation, and SSVM virtualization just to name a few. These supporting resources are not intended to be editable and are just there to _"support"_ services as described before.
 8. Recaf adds a few of its own supporting resources, but manages them separately from the supporting resources list.
 9. The runtime resource allows Recaf to access classes in the current JVM process like `java.lang.String`.
-10. The phantom resource analyzes content in the primary and supporting resources when the workspace is first created and then generates missing references. This allows services like recompilation to compile against libraries that are not directly provided as a supporting resource. This generally works well clean inputs but often fails when obfuscated code is present, which isn't that bad since you shouldn't be recompiling against obfuscated code anyway.
+10. The android resource allows Recaf to access classes in the Android runtime. It is automatically loaded when a resource with DEX files is detected.
 
 ## Creating workspaces
 
@@ -44,7 +44,7 @@ You can create an instance of `WorkspaceExportOptions` and configure them to sui
   * `MATCH_ORIGINAL` which will only compress items if they were originally compressed when read.
   * `SMART` which will only compress items if compression yields a smaller output than a non-compressed item. Very small files may become larger with compression due to the overhead of the compression scheme's dictionary.
   * `ALWAYS` which always compresses items.
-  * `NEVERY` which never compresses items.
+  * `NEVER` which never compresses items.
 * The output type, being a file or directory.
 * The path to write to.
 * The option to bundle contents of supporting resources into the exported output.
