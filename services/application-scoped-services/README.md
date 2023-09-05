@@ -17,6 +17,7 @@ These are the services outlined in the `api` module. Some are given basic implem
 * JavacCompiler
 * MappingFormatManager
 * MappingGenerator
+* MappingListeners
 * PhantomGenerator
 * PluginManager
 * [ResourceImporter](resourceimporter.md)
@@ -39,6 +40,7 @@ The `ui` module defines a number of new service types dedicated to UI behavior.
   * TextProviderService
 * ConfigComponentManager
 * ConfigIconManager
+* FileTypeAssociationService
 * ResourceSummaryService
 * NavigationManager
 * ScriptManager

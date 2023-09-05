@@ -22,4 +22,6 @@ The `core` module defines no new service types.
 
 ## UI
 
-The `ui` module defines no new service types.
+These are the services outlined in the `ui` module.
+
+* AstService
