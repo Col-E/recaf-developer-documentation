@@ -31,3 +31,4 @@
 
 * [How to improve test cases](misc/how-to-improve-test-cases.md)
 * [Configuring annotations in IntelliJ](misc/configuring-annotations-in-intellij.md)
+* [Faster builds in IntelliJ](misc/faster-builds-in-intellij.md)
