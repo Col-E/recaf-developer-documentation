@@ -42,8 +42,9 @@ You can access any of Recaf's services by declaring a constructor annotated with
 
 A shorthand script lets you write your logic without needing to declare a class and `run()` method. These shorthand scripts are given a variable reference to the current workspace, and a SLF4J logger. You can access the current workspace as `workspace` and the logger as `log`.
 
-<pre class="language-java"><code class="lang-java"><strong>// ==Metadata==
-</strong>// @name What is open?
+```java
+// ==Metadata== 
+// @name What is open?
 // @description Prints what kinda workspace is open
 // @version 1.0.0
 // @author Author
@@ -53,7 +54,7 @@ String name = "(empty)";
 if (workspace != null)
     name = workspace.getClass().getSimpleName();
 log.info("Workspace = {}", name);
-</code></pre>
+```
 
 Another example working with the provided `workspace`:
 
