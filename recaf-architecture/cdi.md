@@ -20,11 +20,11 @@ CDI is [Contexts and Dependency Injection for Java EE](https://www.cdi-spec.org/
 
 * `@ApplicationScoped`: This implementation is lazily allocated once and used for the entire duration of the application.
 * `@WorkspaceScoped`: This implementation is lazily allocated once, but the value is then thrown out when a new `Workspace` is loaded. This way when the implementation is requested an instance linked to the current workspace is always given.
-* `@Dependent`: This implementation is not cached, so a new instance is provided every time upon request.
+* `@Dependent`: This implementation is not cached, so a new instance is provided every time upon request. You can think of it as being _"scopeless"_.
 
 When creating a class in Recaf, you can supply these implementations in a constructor that takes in parameters for all the needed types, and is annotated with `@Inject`. This means you will not be using the constructor yourself. You will let CDI allocate it for you. Your new class can then also be used the same way via `@Inject` annotated constructors.
 
-> What does that look like?
+## What does CDI look like in Recaf?
 
 Let's assume a simple case. We'll create an interface outlining some behavior, like compiling some code. We will create a single implementation class and mark it as `@ApplicationScoped` since it is not associated with any specific state, like the current Recaf workspace.
 
@@ -47,6 +47,7 @@ Then in our UI we can create a class that injects the base `Compiler` type. We d
 class CompilerGui {
     TextArea textEditor = ...
     
+    // There is only one implementation of 'Compiler' which is 'CompilerImpl'
     @Inject CompilerGui(Compiler compiler) { this.compiler = compiler; }
     
     // called when user wants to save (CTRL + S)
@@ -56,9 +57,46 @@ class CompilerGui {
 }
 ```
 
-> What if I want multiple implementations?
+> In this example, can I inject `Compiler` into multiple places?
 
-Recaf has multiple decompiler implementations built in. Lets look at a simplified version of how that works. Instead of declaring a parameter of `Decompiler` which takes _one_ value, we use `Instance<Decompiler>` which is an `Iterable<T>` allowing us to loop over all known implementations of the `Decompiler` interface.
+Yes. Because the implementation `CompilerImpl` is `ApplicationScoped` the same instance will be used wherever you inject it into. Do recall, `ApplicationScoped` essentially means the class is a singleton.
+
+> What happens if there are multiple implemetations of `Compiler`?
+
+If you use `@Inject CompilerGui(Compiler compiler)` with more than one available `Compiler` implementation, the injection will throw an exception. You need to qualify which one you want to use. While CDI comes with the ability to use annotations to differentiate between implementations, it is best to create a new sub-class/interface for each implementation and then use those in your `@Inject` constructor.
+
+> What if I want to inject or rquest a value later and not immediately in the constructor?
+
+CDI comes with the type `Instance<T>` which serves this purpose. It implements `Supplier<T>` which allows you do to `T value = instance.get()`. 
+
+```java
+@Dependent
+class Foo {
+	// ...
+}
+
+@ApplicationScoped
+class FooManager {
+    private final Instance<Foo> fooProvider;
+    
+    @Inject
+    FooManager(Instance<Foo> fooProvider) {
+        // We do not request the creation of Foo yet.
+        this.fooProvider = fooProvider;
+    }
+    
+    @Nonnull
+    T createFoo() {
+        // Now we request the creation of Foo.
+        // Since 'Foo' in this example is dependent, each returned value is a new instance.
+        return fooProvider.get();
+    }
+}
+```
+
+> What if I want multiple implementations? Can I get all of them at once?
+
+Recaf has multiple decompiler implementations built in. Lets look at a simplified version of how that works. Instead of declaring a parameter of `Decompiler` which takes _one_ value, we use `Instance<Decompiler>` which can be used both a producer of a single value and as an `Iterable<T>` allowing us to loop over all known implementations of the `Decompiler` interface.
 
 ```java
 @ApplicationScoped
@@ -72,14 +110,33 @@ class DecompileManager {
 
 From here, we can define methods in `DecompileManager` to manage which decompile we want to use. Then in the UI, we `@Inject` this `DecompileManager` and use that to interact with `Decompiler` instances rather than directly doing so.
 
+> Can I mix what scopes I inject into a constructor?
+
+I'd just like to point out, what you can and should do is not always a perfect match. As a general rule of thumb, what you inject as a parameter should be wider in scope than what the current class is defined as. Here's a table for reference.
+
+| I have a...               | I want to inject a...         | Should I do that?      |
+| ------------------------- | ----------------------------- | ---------------------- |
+| `ApplicationScoped` class | `ApplicationScoped` parameter | :heavy_check_mark: Yes |
+| `ApplicationScoped` class | `WorkspaceScoped` parameter   | :x: No                 |
+| `ApplicationScoped` class | `Dependent` parameter         | :x: No                 |
+| `WorkspaceScoped` class   | `ApplicationScoped` parameter | :heavy_check_mark: Yes |
+| `WorkspaceScoped` class   | `WorkspaceScoped` parameter   | :heavy_check_mark: Yes |
+| `WorkspaceScoped` class   | `Dependent` parameter         | :x: No                 |
+| `Dependent` class         | `ApplicationScoped` parameter | :heavy_check_mark: Yes |
+| `Dependent` class         | `WorkspaceScoped` parameter   | :heavy_check_mark: Yes |
+| `Dependent` class         | `Dependent` parameter         | :heavy_check_mark: Yes |
+
+This table is for directly injecting types. If you have a `Dependent` type you can do `Instance<Foo>` like in the example above.
+
 > What if I need a value dynamically, and getting values from the constructor isn't good enough?
 
+Firstly, reconsider if you're designing things effectively if this is a problem for you. Recall that you can use `Instance<T>` to essentially inject a producer of `T`. But on the off chance that there is no real alt
 In situations where providing values to constructors is not feasible, the `Recaf` class provides methods for accessing CDI managed types.
 
 * `Instance<T> instance(Class<T>)`: Gives you a `Supplier<T>` / `Iterable<T>` for the requested type `T`. You can use `Supplier.get()` to grab a single instance of `T`, or use `Iterable.iterator()` to iterate over multiple instances of `T` if more than one implementation exists.
 * `T get(Class<T>)`: Gives you a single instance of the requested type `T`.
 
-## What scope should be used for ... ?
+## How do I know which scope to use when making new services?
 
 Services that are effectively singletons will be `@ApplicationScoped`.
 
@@ -102,7 +159,7 @@ There are multiple reasons.
 
 For things like interactive controls that the user sees, they should not _ever_ track data by themselves. If a control cannot be tossed in the garbage without adverse side effects, it is poorly designed. These controls provide visual access to the data within the Recaf instance _(Like workspace contents)_, nothing more.
 
-This is briefly mentioned before when discussing _"when should I use X scope?"_.
+This is briefly mentioned before when discussing _"how do I know which scope to use?"_.
 
 **2. CDI cannot create proxies of classes with `final` methods, which UI classes often define**
 
