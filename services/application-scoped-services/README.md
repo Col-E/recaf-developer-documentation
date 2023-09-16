@@ -13,8 +13,8 @@ These are the services defined in the `core` module.
 * [AttachManager](attachmanager.md)
 * [ConfigManager](configmanager.md)
 * [DecompileManager](decompilemanager.md)
-* InfoImporter
-* JavacCompiler
+* [InfoImporter](infoimporter.md)
+* [JavacCompiler](javaccompiler.md)
 * MappingFormatManager
 * MappingGenerator
 * MappingListeners
