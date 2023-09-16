@@ -8,9 +8,7 @@ description: >-
 
 ## What is a plugin?
 
-A plugin is a class that implements the interface `software.coley.recaf.plugin.Plugin`. When Recaf launches it looks in the plugins directory for JAR files that contain these plugin classes. It will then attempt to load and initialize them. Because a plugin is distributed as a JAR file a plugin developer can create complex logic and organize it easily across multiple classes in the JAR.&#x20;
-
-An example use case for a plugin that a script cannot satisfy would be integrating with [services](broken-reference) defined in the UI module to add additional capabilities to the UI.
+A plugin is a class that implements the interface `software.coley.recaf.plugin.Plugin`. When Recaf launches it looks in the plugins directory for JAR files that contain these plugin classes. It will then attempt to load and initialize them. Because a plugin is distributed as a JAR file a plugin developer can create complex logic and organize it easily across multiple classes in the JAR.
 
 ## What is a script?
 
@@ -36,7 +34,7 @@ class MyScript {
 }
 ```
 
-You can access any of Recaf's services by declaring a constructor annotated with `@Inject`. For more information see the article on [using services in plugins and scripts](using-services-in-plugins-and-scripts.md).
+You can access any of Recaf's services by declaring a constructor annotated with `@Inject`. For more information and examples see the article on [using services in plugins and scripts](using-services-in-plugins-and-scripts.md).
 
 ### Shorthand script
 

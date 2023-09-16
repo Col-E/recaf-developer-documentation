@@ -4,7 +4,7 @@ description: A brief overview of the major dependencies Recaf uses in each modul
 
 # Important libraries
 
-## API
+## Core
 
 **JVM Bytecode Manipulation**: Recaf uses [ASM](https://asm.ow2.io/) and [CafeDude](https://github.com/Col-E/CAFED00D) to parse bytecode. Most operations will be based on ASM since heavily abstracts away the class file format, making what would otherwise be tedious work simple. CafeDude is used for lower level operations and patching classes that are not compliant with ASM.
 
@@ -20,8 +20,6 @@ description: A brief overview of the major dependencies Recaf uses in each modul
 2. The AST model bakes in the type, when known, to all AST nodes. For a node such as a method reference, you can easily access the name of the reference, the method descriptor of the reference, and the owning class defining the method. This information is what all of our context-sensitive actions must have access to in order to function properly.
 3. The AST supports easy source transformation options. In the past if a user wanted to remap a class or member, we would apply the mapping, decompile the mapped class, then replace the text contents with the new decompilation. This process can be slower on larger classes due to longer decompilation times. If we can skip that step and instead instantly transform the AST to update the text we can save a lot of time in these cases.
 4. The AST supports code formatting. We can allow the user to apply post-processing to decompiled code to give it a uniform style of their choosing, or allow them to format code to that style on demand with a keybind.
-
-## Core
 
 **CDI**: Recaf uses [Weld](https://weld.cdi-spec.org/) as its CDI implementation. You can read the [CDI](cdi.md) article for more information.
 
