@@ -1,7 +1,7 @@
 ---
 description: >-
-  The decompile manager tracks supported decompilers, and provides some
-  ease-of-access decompilation calls
+  The decompile manager tracks supported decompilers, pre/post processing
+  and provides some  ease-of-access decompilation calls
 ---
 
 # DecompileManager
@@ -12,6 +12,8 @@ The decompile manager allows you to:
   * The current preferred JVM or Android decompiler
   * A provided decompiler
 * Register and unregister additional decompilers
+* Pre-process classes before they are decompiled
+* Post-process output from decompilers
 
 Using the decompile calls in this manager will schedule the tasks in a shared thread-pool. Calling the decompile methods on the `Decompiler` instances directly is a blocking operation. If you want to decompile many items it would be best to take advantage of the manager due to the pool usage.
 
@@ -54,4 +56,44 @@ decompilerManager.decompile(decompiler, workspace, classToDecompile)
 // the decompile manager.
 DecompileResult result = decompilerManager.decompile(decompiler, workspace, classToDecompile)
     .get(1, TimeUnit.SECONDS);
+```
+
+## Pre-processing decompiler input
+
+The decompiler manager allows you to register filters for inputs fed to decompilers. This allows you to modify the contents of classes in any arbitrary way prior to decompilation, without actually making a change to the class in the workspace.
+
+Here is an example where we strip out all debug information _(Generics, local variable names, etc)_:
+```java
+JvmBytecodeFilter debugRemovingFilter = (workspace, classInfo, bytecode) -> {
+    // The contents we return here will be what is fed to the decompiler, instead of the original class present in the workspace.
+    ClassWriter writer = new ClassWriter(0);
+    classInfo.getClassReader().accept(writer, ClassReader.SKIP_DEBUG);
+    return writer.toByteArray();
+};
+
+// The filter can be added/removed to/from all decompilers by using the decompile manager.
+decompilerManager.addJvmBytecodeFilter(debugRemovingFilter);
+decompilerManager.removeJvmBytecodeFilter(debugRemovingFilter);
+
+// If you want to only apply the filter to one decompiler, you can do that as well.
+decompiler.addJvmBytecodeFilter(debugRemovingFilter);
+decompiler.removeJvmBytecodeFilter(debugRemovingFilter);
+```
+
+## Post-processing decompiler output
+
+Similar to pre-processing, the output of decompilation can be filtered via the decompiler manager's filters. They operate on the `String` output of decompilers.
+
+```java
+OutputTextFilter tabConversionFilter = (workspace, classInfo, code) -> {
+    return code.replace("    ", "\t");
+};
+
+// Add/remove to/from all decompilers
+decompilerManager.addOutputTextFilter(tabConversionFilter);
+decompilerManager.removeOutputTextFilter(tabConversionFilter);
+
+// Add/remove to/from a single decompiler
+decompiler.addOutputTextFilter(tabConversionFilter);
+decompiler.removeOutputTextFilter(tabConversionFilter);
 ```
