@@ -14,7 +14,7 @@ Plugins can use services by annotating the class with `@Dependent` and annotatin
 import jakarta.enterprise.context.Dependent;
 import jakarta.inject.Inject;
 import software.coley.recaf.plugin.*;
-import software.coley.recaf.workspace.WorkspaceManager;
+import software.coley.recaf.services.workspace.WorkspaceManager;
 
 // Dependent is a CDI annotation which loosely translates to being un-scoped.
 // Plugin instances are managed by Recaf so the scope is bound to when plugins are loaded in practice.
@@ -44,7 +44,7 @@ import jakarta.enterprise.inject.Instance;
 import jakarta.inject.Inject;
 import software.coley.recaf.plugin.*;
 import software.coley.recaf.services.inheritance.InheritanceGraph;
-import software.coley.recaf.workspace.WorkspaceManager;
+import software.coley.recaf.services.workspace.WorkspaceManager;
 
 @Dependent
 class MyPlugin implements Plugin {
@@ -97,8 +97,8 @@ import jakarta.inject.Inject;
 import org.slf4j.Logger;
 import software.coley.recaf.analytics.logging.Logging;
 import software.coley.recaf.info.JvmClassInfo;
-import software.coley.recaf.workspace.WorkspaceManager;
-import software.coley.recaf.workspace.io.ResourceImporter;
+import software.coley.recaf.services.workspace.WorkspaceManager;
+import software.coley.recaf.services.workspace.io.ResourceImporter;
 import software.coley.recaf.workspace.model.BasicWorkspace;
 import software.coley.recaf.workspace.model.Workspace;
 import software.coley.recaf.workspace.model.resource.WorkspaceResource;
