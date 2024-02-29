@@ -12,7 +12,7 @@ A plugin is a class that implements the interface `software.coley.recaf.plugin.P
 
 ## What is a script?
 
-A script is a single Java source file that is executed by users whenever they choose. They can be written as a full class to support similar capabilities to plugins, or in a short-hand that offers automatic imports of most common utility classes, but no access to services.
+A script is a single Java source file that is executed by users whenever they choose. They can be written as a full class to support similar capabilities to plugins such as service injection, or in a short-hand that offers automatic imports of most common utility classes, but no access to services.
 
 ### Full class script
 
