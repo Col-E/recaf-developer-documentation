@@ -11,8 +11,11 @@ These services are available for injection only while a workspace is open. When 
 These are the services defined in the `core` module.&#x20;
 
 * AggregateMappingManager
+* AssemblerPipelineManager
 * AstService
 * CallGraph
+* ConfigIconManager
+* ConfigComponentManager
 * [InheritanceGraph](inheritancegraph.md)
 * MappingApplier
 
