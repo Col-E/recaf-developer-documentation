@@ -16,6 +16,8 @@ But there are some additional things you can write in your test cases that may b
 
 How can you quickly tell what circumstances are covered by test cases though? The obvious option is to read the test cases and figure that out yourself. Ideally, the names of tests are descriptive enough to limit the amount of required reading for that. But there are additional options such as looking at test coverage and checking for branches that are not covered by tests.
 
+## Checking code coverage
+
 You can check what branches in the source are covered by running the tests via `gradlew test` and then build the coverage report via `gradlew buildJacocoAggregate`. All tests are configured to log coverage data via JaCoCo, and the `buildJacocoAggregate` task generates a report consolidating coverage from all tests in all modules into a single report. You can access the report in `./build/aggregate/`.
 
 <figure><img src="../.gitbook/assets/Coverage-Index.png" alt=""><figcaption><p>The main index page of the report shows a table of package's coverage</p></figcaption></figure>
@@ -33,3 +35,7 @@ Clicking on a method finally shows you the actual class source code, with inform
 <figure><img src="../.gitbook/assets/Coverage-Class-Source.png" alt=""><figcaption><p>Green means all branches are covered. Yellow means some were covered. Red means the code was missed.</p></figcaption></figure>
 
 Naturally the more code that is covered the better. So using these reports to figure out where coverage is missing from really helps.
+
+## Checking code coverage online
+
+If you want to see the current code coverage statistics and color-coded source without running the tests locally you can check out the latest [codecov.io/Col-E/Recaf](https://app.codecov.io/gh/Col-E/Recaf) report.
