@@ -11,25 +11,23 @@ These services are available for injection at any point.
 These are the services defined in the `core` module.
 
 * [AttachManager](attachmanager.md)
-* CommentManager
+* [CommentManager](commentmanager.md)
 * [ConfigManager](configmanager.md)
 * [DecompileManager](decompilemanager.md)
-* GsonProvider
+* [GsonProvider](gsonprovider.md)
 * [InfoImporter](infoimporter.md)
 * [JavacCompiler](javaccompiler.md)
 * MappingFormatManager
 * MappingGenerator
 * MappingListeners
 * NameGeneratorProviders
-* PhantomGenerator
-    * JPhantomGenerator
+* PhantomGenerator *(JPhantomGenerator)*
 * PluginManager
 * [ResourceImporter](resourceimporter.md)
-* ScriptEngine
-    * JavacScriptEngine
+* ScriptEngine *(JavacScriptEngine)*
 * ScriptManager
 * SearchService
-* WorkspaceManager
+* [WorkspaceManager](workspacemanager.md)
 
 ## UI
 
@@ -46,7 +44,7 @@ The `ui` module defines a number of new service types dedicated to UI behavior.
 * NavigationManager
 * PathExportingManager
 * PathLoadingManager
-* ResourceSummaryService
+* [ResourceSummaryService](resourcesummaryservice.md)
 * WindowFactory
 * WindowManager
 

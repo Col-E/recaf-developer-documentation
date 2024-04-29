@@ -14,7 +14,7 @@ The resource importer can import a `WorkspaceResource` from a variety of inputs 
 * `URL` - Can point to any content source that can be streamed from.
 * `URI` - Can point to any content source that can be streamed from.
 
-## Examples of reading from different content types
+## Reading from different content types
 
 When providing content from an in-memory source, `ByteSource` can be used:
 

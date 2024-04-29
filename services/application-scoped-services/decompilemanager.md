@@ -15,7 +15,7 @@ The decompile manager allows you to:
 * Pre-process classes before they are decompiled
 * Post-process output from decompilers
 
-Using the decompile calls in this manager will schedule the tasks in a shared thread-pool. Calling the decompile methods on the `Decompiler` instances directly is a blocking operation. If you want to decompile many items it would be best to take advantage of the manager due to the pool usage.
+Using the decompile calls in this manager will schedule the tasks in a shared thread-pool. Calling the decompile methods on the `Decompiler` instances directly is a blocking operation. If you want to decompile many items it would be best to take advantage of the manager due to the pool usage. Additionally, decompiling via the manager will facilitate the caching of decompilation results and globally specified filters.
 
 ## Choosing a decompiler
 
@@ -38,8 +38,8 @@ JvmDecompiler decompiler = decompilerManager.getJvmDecompilers().stream()
 
 If you want to pass a specific decompiler, get an instance and pass it to the decompile functions provided by `DecompileManager`:
 
-* `decompile(Workspace, JvmClassInfo)` - Uses the target decompiler
-* `decompile(JvmDecompiler, Workspace, JvmClassInfo)` - Uses the specified decompiler
+* `decompile(Workspace, JvmClassInfo)` - Uses the target decompiler *(specified in the config)*
+* `decompile(JvmDecompiler, Workspace, JvmClassInfo)` - Uses the specified decompiler passed to the method
 
 ```java
 JvmDecompiler decompiler = ...;

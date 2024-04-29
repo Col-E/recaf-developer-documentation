@@ -132,7 +132,7 @@ JavacArguments arguments = new JavacArgumentsBuilder()
 
 ### Loading and executing the compiled code
 
-The `CompileMap` you get out of the `CompilerResult` is an implementation of `Map<String, byte[]>`. You can thus use the compilation map directly in a utility like `ClassDefiner`. Using the hello world classes from the above examples:
+The `CompileMap` you get out of the `CompilerResult` is an implementation of `Map<String, byte[]>`. You can thus use the compilation map directly in a utility like [`ClassDefiner`](../../utilities/classdefiner.md). Using the hello world classes from the above examples:
 
 ```java
 CompileMap compilations = result.getCompilations();
